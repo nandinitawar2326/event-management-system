@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* ✅ FIX INPUT TEXT VISIBILITY */
+input, select {
+  background-color: white;   /* dark background */
+  color: black;                /* visible text */
+  border: 1px solid #334155;
+}
+
+/* placeholder color */
+input::placeholder {
+  color: #94a3b8;
+}
