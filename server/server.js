@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
@@ -8,13 +10,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
 // ✅ MySQL CONNECTION
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "nandini123",
-  database: "event_db"
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
 db.connect((err) => {
@@ -25,8 +26,7 @@ db.connect((err) => {
   }
 });
 
-
-// 🔐 ADMIN MIDDLEWARE (OPTIONAL 🔥)
+// 🔐 ADMIN MIDDLEWARE
 const isAdmin = (req, res, next) => {
   const role = req.headers.role;
 
@@ -37,12 +37,10 @@ const isAdmin = (req, res, next) => {
   next();
 };
 
-
 // ✅ TEST ROUTE
 app.get("/", (req, res) => {
   res.send("Server Running 🚀");
 });
-
 
 // 🔐 SIGNUP
 app.post("/signup", async (req, res) => {
@@ -63,13 +61,11 @@ app.post("/signup", async (req, res) => {
         res.send("Signup Success");
       }
     );
-
   } catch (error) {
     console.log(error);
     res.status(500).send("Error");
   }
 });
-
 
 // 🔐 LOGIN
 app.post("/login", (req, res) => {
@@ -91,11 +87,10 @@ app.post("/login", (req, res) => {
         return res.send("Wrong password");
       }
 
-      res.send({ user: result[0] }); // ✅ includes role
+      res.send({ user: result[0] });
     }
   );
 });
-
 
 // 🎟️ BOOK EVENT
 app.post("/book", (req, res) => {
@@ -115,7 +110,6 @@ app.post("/book", (req, res) => {
   );
 });
 
-
 // 📄 USER BOOKINGS
 app.get("/my-bookings/:id", (req, res) => {
   const userId = req.params.id;
@@ -133,7 +127,6 @@ app.get("/my-bookings/:id", (req, res) => {
     }
   );
 });
-
 
 // ❌ CANCEL BOOKING
 app.delete("/cancel-booking/:id", (req, res) => {
@@ -157,18 +150,17 @@ app.delete("/cancel-booking/:id", (req, res) => {
   );
 });
 
-
-// 📊 ADMIN BOOKINGS (OPTIONAL PROTECT 🔐)
+// 📊 ADMIN BOOKINGS
 app.get("/admin/bookings", (req, res) => {
   db.query("SELECT * FROM bookings", (err, result) => {
     if (err) {
       console.log(err);
       return res.status(500).send(err);
     }
+
     res.send(result);
   });
 });
-
 
 // 👥 ADMIN USERS
 app.get("/admin/users", (req, res) => {
@@ -179,13 +171,15 @@ app.get("/admin/users", (req, res) => {
         console.log(err);
         return res.status(500).send(err);
       }
+
       res.send(result);
     }
   );
 });
 
-
 // 🚀 START SERVER
-app.listen(5000, () => {
-  console.log("🚀 Server running on http://localhost:5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
