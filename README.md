@@ -43,6 +43,25 @@ A full-stack Event Management System built using **React, Node.js, Express.js, a
 - Git & GitHub
 
 ---
+## 📸 Screenshots
+
+### Home Page
+![Home](screenshots/home.png)
+
+### Login Page
+![Login](screenshots/login.png)
+
+### Signup Page
+![Signup](screenshots/signup.png)
+
+### Event Booking
+![Booking](screenshots/booking.png)
+
+### My Bookings
+![My Bookings](screenshots/my-bookings.png)
+
+### Admin Dashboard
+![Admin Dashboard](screenshots/admin-dashboard.png)
 
 ## 📂 Project Structure
 
